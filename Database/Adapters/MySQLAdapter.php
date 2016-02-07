@@ -29,6 +29,10 @@ abstract class MySQLAdapter
         }
     }
 
+    /**
+     * @param array $whereSth
+     * @return array
+     */
     public static function find(array $whereSth)
     {
         self::$conn = DbConnect::getInstance()->getConnection();
@@ -68,6 +72,9 @@ abstract class MySQLAdapter
         return $objects;
     }
 
+    /**
+     * @return bool
+     */
     public function delete()
     {
         self::$conn = DbConnect::getInstance()->getConnection();
@@ -76,9 +83,15 @@ abstract class MySQLAdapter
         $query = "DELETE FROM $table WHERE id = " . $this->params['id'];
         $sth = self::$conn->prepare($query);
 
-        $sth->execute();
+        if($sth->execute())
+            return true;
+
+        else return false;
     }
 
+    /**
+     * @return bool
+     */
     public function save()
     {
         self::$conn = DbConnect::getInstance()->getConnection();
@@ -102,7 +115,11 @@ abstract class MySQLAdapter
             for ($i = 0; $i < count($this->params); $i++) {
                 $sth->bindValue(':v' . $i, $colValue[$i]);
             }
-            $sth->execute();
+
+            if($sth->execute())
+                return true;
+
+            else return false;
 
         } else {
             for ($i = 0; $i < count($this->params); $i++) {
@@ -118,7 +135,11 @@ abstract class MySQLAdapter
             for ($i = 0; $i < count($this->params); $i++) {
                 $sth->bindValue(':v' . $i, $colValue[$i]);
             }
-            $sth->execute();
+
+            if($sth->execute())
+                return true;
+
+            else return false;
         }
     }
 }
